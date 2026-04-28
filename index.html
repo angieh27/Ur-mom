@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClubConnect</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🎉 ClubConnect</h1>
+  <p>Find clubs. Grow clubs. Join the fun.</p>
+</header>
+
+<section class="container">
+
+  <div class="card">
+    <h2>Add a Club</h2>
+    <input type="text" id="clubName" placeholder="Club Name">
+    <input type="text" id="clubLeader" placeholder="Club Leaders">
+    <input type="number" id="clubCount" placeholder="Number of Attendees">
+    <button onclick="addClub()">Add Club</button>
+  </div>
+
+  <div class="card">
+    <h2>All Clubs</h2>
+    <div id="clubList"></div>
+  </div>
+
+  <div class="card">
+    <h2>🔥 Low Attendance Swipe</h2>
+    <div id="swipeCard"></div>
+    <div class="buttons">
+      <button onclick="skipClub()">👎 Skip</button>
+      <button onclick="bookmarkClub()">⭐ Bookmark</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>⭐ Bookmarked Clubs</h2>
+    <div id="bookmarks"></div>
+  </div>
+
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
