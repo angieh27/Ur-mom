@@ -1,22 +1,8 @@
 body {
   font-family: Arial;
+  margin: 0;
   background: #ff4f8b;
   color: white;
-  margin: 0;
-  padding: 0;
-}
-
-nav {
-  display: flex;
-  gap: 15px;
-  padding: 10px;
-  background: #ff2e7a;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
 }
 
 h1 {
@@ -26,26 +12,25 @@ h1 {
 .card {
   background: white;
   color: black;
-  padding: 15px;
   margin: 15px;
-  border-radius: 15px;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.club-box {
+  background: white;
+  color: black;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  cursor: pointer;
 }
 
 button {
   background: #ff2e7a;
   color: white;
   border: none;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
-}
-
-.row {
-  display: flex;
-  justify-content: center;
-}
-
-input {
   padding: 8px;
-  margin: 5px;
+  margin: 4px;
+  border-radius: 8px;
 }
