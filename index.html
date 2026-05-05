@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>ClubConnect - Discover</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>ClubConnect</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <nav>
   <a href="index.html">Discover</a>
   <a href="clubs.html">All Clubs</a>
-  <a href="leader.html">Leader Dashboard</a>
 </nav>
 
 <h1>🔥 Discover Clubs</h1>
 
+<div class="card">
+  <h2>Add Club</h2>
+  <input id="name" placeholder="Club Name">
+  <input id="leader" placeholder="Leader(s)">
+  <input id="count" type="number" placeholder="Number of Members">
+  <button onclick="addClub()">Add Club</button>
+</div>
+
 <div class="card" id="swipeCard"></div>
 
 <div class="row">
-  <button onclick="skipClub()">Skip</button>
-  <button onclick="bookmarkClub()">Bookmark ⭐</button>
+  <button onclick="skipClub()">Skip ➡️</button>
+  <button onclick="bookmarkClub()">⭐ Bookmark</button>
 </div>
 
-<h2>Bookmarked Clubs</h2>
+<h2>⭐ Bookmarked Clubs</h2>
 <div id="bookmarks"></div>
 
 <script src="script.js"></script>
