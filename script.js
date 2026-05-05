@@ -27,7 +27,8 @@ function addClub() {
     leader,
     members,
     presentToday: [],
-    history: []
+    history: [],
+    meetings: [] // ✅ NEW
   });
 
   save();
@@ -104,17 +105,19 @@ function renderDirectory() {
     `;
   });
 }
+
 /* ---------- OPEN CLUB ---------- */
 function openClub(id) {
   window.location.href = "club.html?id=" + id;
 }
 
-/* ---------- CLUB DASHBOARD ---------- */
+/* ---------- GET CLUB ---------- */
 function getClub() {
   let id = new URLSearchParams(window.location.search).get("id");
   return clubs.find(c => c.id == id);
 }
 
+/* ---------- CLUB DASHBOARD (OLD FEATURE) ---------- */
 function renderClubPage() {
   let club = getClub();
   let box = document.getElementById("clubDashboard");
@@ -202,12 +205,74 @@ function saveDay() {
   renderClubPage();
 }
 
+/* ===================================================== */
+/* 🆕 SPREADSHEET FEATURE */
+/* ===================================================== */
+
+function renderClubSpreadsheet() {
+  let club = getClub();
+  if (!club) return;
+
+  // ensure meetings exists
+  if (!club.meetings) club.meetings = [];
+
+  let title = document.getElementById("clubTitle");
+  let tbody = document.querySelector("#spreadsheet tbody");
+
+  if (!title || !tbody) return;
+
+  title.innerText = club.name;
+  tbody.innerHTML = "";
+
+  club.meetings.forEach((m, i) => {
+    tbody.innerHTML += `
+      <tr>
+        <td contenteditable onblur="editMeeting(${i}, 'leader', this.innerText)">${m.leader}</td>
+        <td contenteditable onblur="editMeeting(${i}, 'date', this.innerText)">${m.date}</td>
+        <td contenteditable onblur="editMeeting(${i}, 'count', this.innerText)">${m.count}</td>
+        <td contenteditable onblur="editMeeting(${i}, 'names', this.innerText)">${m.names}</td>
+        <td><button onclick="deleteMeeting(${i})">X</button></td>
+      </tr>
+    `;
+  });
+}
+
+function addMeeting() {
+  let club = getClub();
+
+  if (!club.meetings) club.meetings = [];
+
+  let leader = document.getElementById("leaderNames").value;
+  let date = document.getElementById("date").value;
+  let count = document.getElementById("attendeeCount").value;
+  let names = document.getElementById("attendeeNames").value;
+
+  club.meetings.push({ leader, date, count, names });
+
+  save();
+  renderClubSpreadsheet();
+}
+
+function editMeeting(i, field, value) {
+  let club = getClub();
+  club.meetings[i][field] = value;
+  save();
+}
+
+function deleteMeeting(i) {
+  let club = getClub();
+  club.meetings.splice(i, 1);
+  save();
+  renderClubSpreadsheet();
+}
+
 /* ---------- INIT ---------- */
 function renderAll() {
   renderSwipe();
   renderBookmarks();
   renderDirectory();
   renderClubPage();
+  renderClubSpreadsheet(); // ✅ NEW
 }
 
 renderAll();
