@@ -1,18 +1,25 @@
 let clubs = JSON.parse(localStorage.getItem("clubs")) || [];
+let bookmarks = JSON.parse(localStorage.getItem("bookmarks")) || [];
+let swipeIndex = 0;
 
+/* ---------- SAVE ---------- */
 function save() {
   localStorage.setItem("clubs", JSON.stringify(clubs));
+  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 }
 
-/* ---------------- CREATE CLUB ---------------- */
-
+/* ---------- ADD CLUB ---------- */
 function addClub() {
   let name = document.getElementById("name").value;
   let leader = document.getElementById("leader").value;
   let count = parseInt(document.getElementById("count").value);
 
+  if (!name || !leader || isNaN(count)) return;
+
   let members = [];
-  for (let i = 1; i <= count; i++) members.push("Member " + i);
+  for (let i = 1; i <= count; i++) {
+    members.push("Member " + i);
+  }
 
   clubs.push({
     id: Date.now(),
@@ -24,39 +31,86 @@ function addClub() {
   });
 
   save();
-  renderIndex();
+  renderAll();
 }
 
-/* ---------------- INDEX PAGE ---------------- */
+/* ---------- SWIPE SYSTEM ---------- */
+function getLowClubs() {
+  return clubs.filter(c => c.members.length < 8);
+}
 
-function renderIndex() {
-  let box = document.getElementById("clubList");
+function renderSwipe() {
+  let card = document.getElementById("swipeCard");
+  if (!card) return;
+
+  let low = getLowClubs();
+
+  if (low.length === 0) {
+    card.innerHTML = "No low attendance clubs 🎉";
+    return;
+  }
+
+  let club = low[swipeIndex % low.length];
+
+  card.innerHTML = `
+    <h2>${club.name}</h2>
+    <p>${club.members.length} members</p>
+    <p>Leader: ${club.leader}</p>
+  `;
+}
+
+function skipClub() {
+  swipeIndex++;
+  renderSwipe();
+}
+
+function bookmarkClub() {
+  let low = getLowClubs();
+  let club = low[swipeIndex % low.length];
+
+  if (!bookmarks.find(b => b.id === club.id)) {
+    bookmarks.push(club);
+    save();
+  }
+
+  renderBookmarks();
+  skipClub();
+}
+
+function renderBookmarks() {
+  let box = document.getElementById("bookmarks");
+  if (!box) return;
+
+  box.innerHTML = "";
+  bookmarks.forEach(c => {
+    box.innerHTML += `<p>⭐ ${c.name}</p>`;
+  });
+}
+
+/* ---------- DIRECTORY PAGE ---------- */
+function renderDirectory() {
+  let box = document.getElementById("clubDirectory");
   if (!box) return;
 
   box.innerHTML = "";
 
   clubs.forEach(c => {
-    let status = c.members.length < 8 ? "LOW" : "HEALTHY";
-
     box.innerHTML += `
       <div class="club-box" onclick="openClub(${c.id})">
-        <h3>${c.name}</h3>
-        <p>${c.leader}</p>
-        <p>Members: ${c.members.length}</p>
-        <p>Status: ${status}</p>
+        <h2>${c.name}</h2>
+        <p>${c.members.length} members</p>
+        <p>${c.members.length < 8 ? '🔴 Low' : '🟢 Healthy'}</p>
       </div>
     `;
   });
 }
 
-/* ---------------- OPEN CLUB PAGE ---------------- */
-
+/* ---------- OPEN CLUB ---------- */
 function openClub(id) {
   window.location.href = "club.html?id=" + id;
 }
 
-/* ---------------- CLUB DASHBOARD ---------------- */
-
+/* ---------- CLUB DASHBOARD ---------- */
 function getClub() {
   let id = new URLSearchParams(window.location.search).get("id");
   return clubs.find(c => c.id == id);
@@ -64,37 +118,42 @@ function getClub() {
 
 function renderClubPage() {
   let club = getClub();
-  if (!club) return;
-
   let box = document.getElementById("clubDashboard");
+  if (!club || !box) return;
 
   let percent = club.members.length === 0 ? 0 :
     Math.round((club.presentToday.length / club.members.length) * 100);
 
-  let membersUI = club.members.map((m, i) => `
-    <div>
-      <input value="${m}" onchange="editMember(${i}, this.value)">
-      <button onclick="toggle('${m}')">Present</button>
-      <button onclick="deleteMember(${i})">X</button>
-    </div>
-  `).join("");
+  let membersHTML = club.members.map((m, i) => {
+    let present = club.presentToday.includes(m);
+
+    return `
+      <div>
+        <input value="${m}" onchange="editMember(${i}, this.value)">
+        <button onclick="toggle('${m}')">${present ? 'Present' : 'Absent'}</button>
+        <button onclick="deleteMember(${i})">X</button>
+      </div>
+    `;
+  }).join("");
 
   box.innerHTML = `
-    <h2>${club.name}</h2>
-    <p>${club.leader}</p>
-    <p>${percent}% attendance today</p>
+    <div class="card">
+      <h2>${club.name}</h2>
+      <p>${club.leader}</p>
+      <p>${percent}% attendance today</p>
 
-    <h3>Members</h3>
-    ${membersUI}
+      ${membersHTML}
 
-    <button onclick="addMember()">+ Add Member</button>
-    <button onclick="saveDay()">Save Attendance Day</button>
+      <button onclick="addMember()">➕ Add Member</button>
+      <button onclick="saveDay()">💾 Save Attendance</button>
 
-    <h3>History</h3>
-    ${renderHistory(club)}
+      <h3>History</h3>
+      ${club.history.map(h => `<p>${h.date}: ${h.present.join(", ")}</p>`).join("")}
+    </div>
   `;
 }
 
+/* ---------- MEMBER ACTIONS ---------- */
 function toggle(name) {
   let club = getClub();
 
@@ -111,6 +170,8 @@ function toggle(name) {
 function addMember() {
   let club = getClub();
   let name = prompt("Member name:");
+  if (!name) return;
+
   club.members.push(name);
   save();
   renderClubPage();
@@ -142,13 +203,12 @@ function saveDay() {
   renderClubPage();
 }
 
-function renderHistory(club) {
-  return club.history.map(h =>
-    `<p><b>${h.date}</b>: ${h.present.join(", ")}</p>`
-  ).join("");
+/* ---------- INIT ---------- */
+function renderAll() {
+  renderSwipe();
+  renderBookmarks();
+  renderDirectory();
+  renderClubPage();
 }
 
-/* ---------------- INIT ---------------- */
-
-renderIndex();
-renderClubPage();
+renderAll();
