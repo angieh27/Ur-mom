@@ -61,3 +61,19 @@ input {
   border-radius: 12px;
   cursor: pointer;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  color: black;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+input {
+  margin: 5px;
+}
