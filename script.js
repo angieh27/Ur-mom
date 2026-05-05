@@ -104,7 +104,6 @@ function renderDirectory() {
     `;
   });
 }
-
 /* ---------- OPEN CLUB ---------- */
 function openClub(id) {
   window.location.href = "club.html?id=" + id;
