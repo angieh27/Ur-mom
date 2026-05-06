@@ -13,6 +13,7 @@ function addClub() {
   let name = document.getElementById("name").value;
   let leader = document.getElementById("leader").value;
   let count = parseInt(document.getElementById("count").value);
+  let startDate = document.getElementById("startDate").value; // ✅ NEW
 
   if (!name || !leader || isNaN(count)) return;
 
@@ -28,7 +29,8 @@ function addClub() {
     members,
     presentToday: [],
     history: [],
-    meetings: [] // ✅ NEW
+    meetings: [],
+    startDate // ✅ NEW
   });
 
   save();
@@ -57,6 +59,7 @@ function renderSwipe() {
     <h2>${club.name}</h2>
     <p>${club.members.length} members</p>
     <p>Leader: ${club.leader}</p>
+    <p>Started: ${club.startDate || "N/A"}</p>
   `;
 }
 
@@ -100,6 +103,7 @@ function renderDirectory() {
       <div class="club-box" onclick="openClub(${c.id})">
         <h2>${c.name}</h2>
         <p>${c.members.length} members</p>
+        <p>Started: ${c.startDate || "N/A"}</p>
         <p>${c.members.length < 8 ? '🔴 Low' : '🟢 Healthy'}</p>
       </div>
     `;
@@ -117,7 +121,7 @@ function getClub() {
   return clubs.find(c => c.id == id);
 }
 
-/* ---------- CLUB DASHBOARD (OLD FEATURE) ---------- */
+/* ---------- CLUB DASHBOARD ---------- */
 function renderClubPage() {
   let club = getClub();
   let box = document.getElementById("clubDashboard");
@@ -142,6 +146,7 @@ function renderClubPage() {
     <div class="card">
       <h2>${club.name}</h2>
       <p>${club.leader}</p>
+      <p>Started: ${club.startDate || "N/A"}</p>
       <p>${percent}% attendance today</p>
 
       ${membersHTML}
@@ -205,15 +210,11 @@ function saveDay() {
   renderClubPage();
 }
 
-/* ===================================================== */
-/* 🆕 SPREADSHEET FEATURE */
-/* ===================================================== */
-
+/* ---------- SPREADSHEET FEATURE ---------- */
 function renderClubSpreadsheet() {
   let club = getClub();
   if (!club) return;
 
-  // ensure meetings exists
   if (!club.meetings) club.meetings = [];
 
   let title = document.getElementById("clubTitle");
@@ -239,8 +240,6 @@ function renderClubSpreadsheet() {
 
 function addMeeting() {
   let club = getClub();
-
-  if (!club.meetings) club.meetings = [];
 
   let leader = document.getElementById("leaderNames").value;
   let date = document.getElementById("date").value;
@@ -272,7 +271,7 @@ function renderAll() {
   renderBookmarks();
   renderDirectory();
   renderClubPage();
-  renderClubSpreadsheet(); // ✅ NEW
+  renderClubSpreadsheet();
 }
 
 renderAll();
