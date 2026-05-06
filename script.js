@@ -149,7 +149,7 @@ function renderClubPage() {
      <p>
   Started:
   <input id="startDateInput" type="date"
-  value="${club.startDate || ''}"
+  value="${formatDateForInput(club.startDate)}"
   onchange="updateStartDate(this.value)">
 </p>
       <p>${percent}% attendance today</p>
@@ -205,13 +205,12 @@ function deleteMember(i) {
 function saveDay() {
   let club = getClub();
 
-  // ✅ ALSO SAVE START DATE
+  // ✅ Save start date properly
   let dateInput = document.getElementById("startDateInput");
-  if (dateInput) {
-    club.startDate = dateInput.value;
+  if (dateInput && dateInput.value) {
+    club.startDate = dateInput.value; // already YYYY-MM-DD
   }
 
-  // existing attendance save
   club.history.push({
     date: new Date().toLocaleDateString(),
     present: [...club.presentToday]
@@ -289,6 +288,24 @@ function updateStartDate(newDate) {
   let club = getClub();
   club.startDate = newDate;
   save();
+}
+
+function formatDateForInput(dateStr) {
+  if (!dateStr) return "";
+
+  // If already correct format, return it
+  if (dateStr.includes("-")) return dateStr;
+
+  // Convert MM/DD/YYYY → YYYY-MM-DD
+  let parts = dateStr.split("/");
+  if (parts.length !== 3) return "";
+
+  let [month, day, year] = parts;
+
+  month = month.padStart(2, "0");
+  day = day.padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }
 
 renderAll();
