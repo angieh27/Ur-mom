@@ -148,9 +148,9 @@ function renderClubPage() {
       <p>${club.leader}</p>
      <p>
   Started:
-  <input type="date"
-    value="${club.startDate || ''}"
-    onchange="updateStartDate(this.value)">
+  <input id="startDateInput" type="date"
+  value="${club.startDate || ''}"
+  onchange="updateStartDate(this.value)">
 </p>
       <p>${percent}% attendance today</p>
 
@@ -205,6 +205,13 @@ function deleteMember(i) {
 function saveDay() {
   let club = getClub();
 
+  // ✅ ALSO SAVE START DATE
+  let dateInput = document.getElementById("startDateInput");
+  if (dateInput) {
+    club.startDate = dateInput.value;
+  }
+
+  // existing attendance save
   club.history.push({
     date: new Date().toLocaleDateString(),
     present: [...club.presentToday]
@@ -214,7 +221,6 @@ function saveDay() {
   save();
   renderClubPage();
 }
-
 /* ---------- SPREADSHEET FEATURE ---------- */
 function renderClubSpreadsheet() {
   let club = getClub();
