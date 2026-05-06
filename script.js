@@ -146,7 +146,12 @@ function renderClubPage() {
     <div class="card">
       <h2>${club.name}</h2>
       <p>${club.leader}</p>
-      <p>Started: ${club.startDate || "N/A"}</p>
+     <p>
+  Started:
+  <input type="date"
+    value="${club.startDate || ''}"
+    onchange="updateStartDate(this.value)">
+</p>
       <p>${percent}% attendance today</p>
 
       ${membersHTML}
@@ -272,6 +277,12 @@ function renderAll() {
   renderDirectory();
   renderClubPage();
   renderClubSpreadsheet();
+}
+
+function updateStartDate(newDate) {
+  let club = getClub();
+  club.startDate = newDate;
+  save();
 }
 
 renderAll();
