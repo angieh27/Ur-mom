@@ -149,9 +149,8 @@ function renderClubPage() {
      <p>
   Started:
   <input id="startDateInput" type="date"
-  value="${formatDateForInput(club.startDate)}"
+  value="${club.startDate ? club.startDate.substring(0,10) : ''}"
   onchange="updateStartDate(this.value)">
-</p>
       <p>${percent}% attendance today</p>
 
       ${membersHTML}
@@ -205,10 +204,10 @@ function deleteMember(i) {
 function saveDay() {
   let club = getClub();
 
-  // ✅ Save start date properly
-  let dateInput = document.getElementById("startDateInput");
-  if (dateInput && dateInput.value) {
-    club.startDate = dateInput.value; // already YYYY-MM-DD
+  // 🔥 ALWAYS grab current date input
+  let input = document.getElementById("startDateInput");
+  if (input && input.value) {
+    club.startDate = input.value;
   }
 
   club.history.push({
@@ -217,6 +216,7 @@ function saveDay() {
   });
 
   club.presentToday = [];
+
   save();
   renderClubPage();
 }
@@ -287,7 +287,13 @@ function renderAll() {
 function updateStartDate(newDate) {
   let club = getClub();
   club.startDate = newDate;
+
   save();
+
+  // 🔥 force re-render AFTER saving
+  setTimeout(() => {
+    renderClubPage();
+  }, 0);
 }
 
 function formatDateForInput(dateStr) {
