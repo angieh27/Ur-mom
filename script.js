@@ -179,7 +179,16 @@ function renderClubPage() {
       <button onclick="saveDay()">💾 Save Attendance</button>
 
       <h3>History</h3>
-      ${club.history.map(h => `<p>${h.date}: ${h.present.join(", ")}</p>`).join("")}
+      ${club.history.map(h => `
+  <p>
+    ${h.date} —
+    ${h.percent}% attendance
+    (${h.present.length} present)
+
+    <br>
+    ${h.present.join(", ")}
+  </p>
+`).join("")}
     </div>
   `;
 }
@@ -224,17 +233,25 @@ function deleteMember(i) {
 function saveDay() {
   let club = getClub();
 
-  // 🔥 ALWAYS grab current date input
+  // Save edited start date
   let input = document.getElementById("startDateInput");
   if (input && input.value) {
     club.startDate = input.value;
   }
 
+  // Calculate attendance percentage
+  let percent = club.members.length === 0
+    ? 0
+    : Math.round((club.presentToday.length / club.members.length) * 100);
+
+  // Save history entry
   club.history.push({
     date: new Date().toLocaleDateString(),
-    present: [...club.presentToday]
+    present: [...club.presentToday],
+    percent: percent
   });
 
+  // Reset attendance for next meeting
   club.presentToday = [];
 
   save();
