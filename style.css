@@ -77,3 +77,12 @@ th, td {
 input {
   margin: 5px;
 }
+
+select {
+  width: 320px;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 14px;
+  border: 2px solid #ccc;
+  font-size: 18px;
+}
