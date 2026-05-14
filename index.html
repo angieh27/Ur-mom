@@ -17,9 +17,74 @@
 
 <div class="card">
   <h2>Add Club</h2>
+
   <input id="name" placeholder="Club Name">
   <input id="leader" placeholder="Leader(s)">
   <input id="count" type="number" placeholder="Number of Members">
+  <input id="startDate" type="date">
+
+  <!-- CATEGORY -->
+  <select id="category">
+    <option value="">Select Category</option>
+    <option>School Leadership</option>
+    <option>Affinity Group</option>
+    <option>Language/Culture</option>
+    <option>Sports Business</option>
+    <option>Active Sports</option>
+    <option>Board Games</option>
+    <option>Volunteering</option>
+    <option>Business/Entrepreneurship</option>
+    <option>Political</option>
+    <option>Research</option>
+    <option>Sustainability</option>
+    <option>Gaming</option>
+    <option>Coding</option>
+    <option>Flight</option>
+    <option>Film</option>
+    <option>Visual Arts</option>
+    <option>Medicine</option>
+    <option>Music</option>
+    <option>Literature</option>
+    <option>Competitive Science</option>
+    <option>Journalism</option>
+    <option>Design</option>
+    <option>Food</option>
+    <option>AI</option>
+    <option>Women Advocacy</option>
+    <option>Skills</option>
+    <option>Music Community Volunteering</option>
+    <option>Tutoring</option>
+    <option>Math</option>
+    <option>Science Exposure</option>
+    <option>Philosophy</option>
+    <option>Animals</option>
+    <option>Drawing</option>
+    <option>Fashion</option>
+  </select>
+
+  <!-- DAY -->
+  <select id="meetingDay">
+    <option value="">Meeting Day</option>
+    <option>Monday</option>
+    <option>Tuesday</option>
+    <option>Wednesday</option>
+    <option>Thursday</option>
+    <option>Friday</option>
+  </select>
+
+  <!-- TIME -->
+  <select id="meetingTime">
+    <option value="">Meeting Time</option>
+    <option>Morning</option>
+    <option>Club Time</option>
+    <option>After School</option>
+  </select>
+
+  <!-- ROOM -->
+  <input id="roomNumber" placeholder="Meeting Room Number">
+
+  <button onclick="addClub()">Add Club</button>
+</div>
   
   <!-- ✅ NEW DATE INPUT -->
   <input id="startDate" type="date">
