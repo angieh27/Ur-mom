@@ -13,11 +13,17 @@ function addClub() {
   let name = document.getElementById("name").value;
   let leader = document.getElementById("leader").value;
   let count = parseInt(document.getElementById("count").value);
-  let startDate = document.getElementById("startDate").value; // ✅ NEW
+  let startDate = document.getElementById("startDate").value;
+
+  let category = document.getElementById("category").value;
+  let meetingDay = document.getElementById("meetingDay").value;
+  let meetingTime = document.getElementById("meetingTime").value;
+  let roomNumber = document.getElementById("roomNumber").value;
 
   if (!name || !leader || isNaN(count)) return;
 
   let members = [];
+
   for (let i = 1; i <= count; i++) {
     members.push("Member " + i);
   }
@@ -30,7 +36,12 @@ function addClub() {
     presentToday: [],
     history: [],
     meetings: [],
-    startDate // ✅ NEW
+    startDate,
+
+    category,
+    meetingDay,
+    meetingTime,
+    roomNumber
   });
 
   save();
