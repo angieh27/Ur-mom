@@ -70,6 +70,9 @@ function renderSwipe() {
     <h2>${club.name}</h2>
     <p>${club.members.length} members</p>
     <p>Leader: ${club.leader}</p>
+    <p>Category: ${club.category}</p>
+    <p>${club.meetingDay} • ${club.meetingTime}</p>
+    <p>Room: ${club.roomNumber}</p>
     <p>Started: ${club.startDate || "N/A"}</p>
   `;
 }
@@ -114,6 +117,9 @@ function renderDirectory() {
       <div class="club-box" onclick="openClub(${c.id})">
         <h2>${c.name}</h2>
         <p>${c.members.length} members</p>
+        <p>${c.category}</p>
+        <p>${c.meetingDay} • ${c.meetingTime}</p>
+        <p>Room ${c.roomNumber}</p>
         <p>Started: ${c.startDate || "N/A"}</p>
         <p>${c.members.length < 8 ? '🔴 Low' : '🟢 Healthy'}</p>
       </div>
@@ -157,6 +163,9 @@ function renderClubPage() {
     <div class="card">
       <h2>${club.name}</h2>
       <p>${club.leader}</p>
+      <p>Category: ${club.category}</p>
+      <p>Meets: ${club.meetingDay} • ${club.meetingTime}</p>
+      <p>Room: ${club.roomNumber}</p>
      <p>
   Started:
   <input id="startDateInput" type="date"
